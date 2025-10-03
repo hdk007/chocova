@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chocova</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="shortcut icon" href="chocova-removebg-preview.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Apply the Poppins font family */
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Add padding to the top to prevent content from being hidden by the fixed navbar */
+            padding-top: 80px;
+            background-color: #fdf8f2; /* A light cream background to complement the theme */
+        }
+        .logo{
+            height: 90px;
+            width: auto;
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* The main carousel container */
+        .carousel-container {
+            /* Ensures the slides outside the container are not visible */
+            overflow: hidden;
+            border-radius: 1.5rem; /* Large rounded corners */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Deep shadow for a 3D effect */
+            border: 4px solid #5D4037; /* A milk chocolate border */
+            margin-top: 2%;
+        }
+
+        /* The slider track that moves horizontally */
+        .carousel-slider {
+            /* Contains all slides in a row */
+            display: flex;
+            /* Smooth transition for the slide animation */
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        /* Each individual slide */
+        .carousel-slide {
+            /* Each slide takes up the full width of the container */
+            min-width: 100%;
+            position: relative; /* For positioning the text overlay */
+            overflow: hidden; /* For the Ken Burns effect */
+        }
+
+        /* The image within a slide */
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            /* Ensures the image covers the slide area without stretching */
+            object-fit: cover;
+            display: block;
+            /* Animation for the Ken Burns (zoom) effect */
+            transition: transform 6s ease-in-out; 
+        }
+        
+        /* The Ken Burns zoom effect on the active slide's image */
+        .carousel-slide.active img {
+            transform: scale(1.15);
+        }
+
+        /* Text overlay on each slide */
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 2.5rem;
+            background: linear-gradient(to top, rgba(33, 21, 18, 0.9) 0%, rgba(33, 21, 18, 0) 100%);
+            color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out 0.5s, transform 0.8s ease-out 0.5s;
+        }
+        
+        /* Fade in and slide up the text on the active slide */
+        .carousel-slide.active .slide-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation buttons (Prev/Next) */
+        .carousel-nav-btn {
+            background-color: rgba(93, 64, 55, 0.7); /* Semi-transparent milk chocolate */
+            color: #EFEBE9;
+            border: 2px solid rgba(239, 235, 233, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .carousel-nav-btn:hover {
+            background-color: #5D4037;
+            transform: scale(1.1);
+        }
+
+        /* Navigation dots container */
+        .carousel-dots {
+            position: absolute;
+            bottom: 1.25rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* Individual navigation dot */
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(93, 64, 55, 0.8); /* Muted color for inactive dots */
+            border: 2px solid rgba(239, 235, 233, 0.6);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+        
+        /* Style for the active dot */
+        .carousel-dot.active {
+            background-color: #D7CCC8; /* A creamy, white chocolate color */
+            transform: scale(1.25);
+        }
+
+        .prod-hd{
+            font-size: 2.5rem;
+            text-align: center;
+            color: #4a2c2a;
+            margin-top: 7%;
+            font-weight: 700;
+        }
+        .product-area{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5%;
+        }
+        .aboutus{
+            display: flex;
+            align-items: center;
+            margin: 3% 0;
+            gap: 2rem;
+        }
+        .rvws{
+            width: 90%;
+            margin-left: 5%;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        @media (max-width: 768px) {
+            .aboutus {
+                flex-direction: column;
+                text-align: center;
+            }
+            .rvws{
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .fttr{
+                background-color: #4a2c2a;
+            }
+
+
+            .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        .footer-bg {
+            background-color: #3D2B1F; /* Dark chocolate */
+        }
+        .footer-text {
+            color: #000000; /* Creamy off-white */
+        }
+        .footer-accent {
+            color: #C17A4F; /* Caramel accent */
+        }
+        .footer-link:hover {
+            color: #DDA15E; /* Lighter caramel for hover */
+            transition: color 0.3s ease;
+        }
+        .newsletter-input {
+            background-color: #5A3A29; /* Milk chocolate */
+            color: #000000;
+            border-color: #7B4F3B;
+        }
+        .newsletter-input::placeholder {
+            color: #b0a091;
+        }
+        .newsletter-button {
+            background-color: #C17A4F;
+            color: #000000;
+            transition: background-color 0.3s ease;
+        }
+        .newsletter-button:hover {
+            background-color: #DDA15E;
+        }
+        /* Style for the wavy divider */
+        .wavy-divider {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            transform: rotate(180deg);
+        }
+        .wavy-divider svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 80px; /* Adjust height of the wave */
+        }
+        .wavy-divider .shape-fill {
+            fill: #3D2B1F; /* Must match footer background */
+        }
+        }
+        /* Custom chocolate theme colors for Tailwind */
+        .text-chocolate-dark { color: #4a2c2a; }
+        .text-chocolate-medium { color: #7b3f00; }
+        .hover\:text-caramel:hover { color: #d2691e; }
+        .hover\:bg-cream:hover { background-color: #f5f1e9; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-md fixed w-full top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo/Brand Name -->
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-3xl font-bold text-chocolate-dark"><img src="chocova-removebg-preview.png" alt="Chocova" class="logo"></a>
+                </div>
+
+                <!-- Desktop Menu Links -->
+                <div class="hidden md:flex items-baseline space-x-10">
+                    <a href="#" class="text-chocolate-medium hover:text-caramel font-semibold text-lg transition duration-300">Home</a>
+                    <a href="#" class="text-chocolate-medium hover:text-caramel font-semibold text-lg transition duration-300">About Us</a>
+                    <a href="#" class="text-chocolate-medium hover:text-caramel font-semibold text-lg transition duration-300">Products</a>
+                    <a href="#" class="text-chocolate-medium hover:text-caramel font-semibold text-lg transition duration-300">Contact Us</a>
+                </div>
+
+                <!-- Hamburger Menu Button (Mobile) -->
+                <div class="md:hidden flex items-center">
+                    <button id="hamburger-button" class="inline-flex items-center justify-center p-2 rounded-md text-chocolate-dark hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-chocolate-dark" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <!-- Hamburger Icon -->
+                        <svg id="open-icon" class="block h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                        <!-- Close Icon (X) -->
+                        <svg id="close-icon" class="hidden h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden transition-all duration-300 ease-in-out">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
+                <a href="#" class="block px-3 py-3 rounded-md text-lg font-medium text-chocolate-medium hover:bg-cream">Home</a>
+                <a href="#" class="block px-3 py-3 rounded-md text-lg font-medium text-chocolate-medium hover:bg-cream">About Us</a>
+                <a href="#" class="block px-3 py-3 rounded-md text-lg font-medium text-chocolate-medium hover:bg-cream">Products</a>
+                <a href="#" class="block px-3 py-3 rounded-md text-lg font-medium text-chocolate-medium hover:bg-cream">Contact Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="w-11/12 lg:w-4/5 max-w-4xl mx-auto space-y-4">
+        <!-- <h1 class="font-playfair text-4xl md:text-5xl text-center text-[#D7CCC8] mb-6">A Symphony of Chocolate</h1> -->
+        
+        <!-- Carousel Component -->
+        <div id="chocolate-carousel" class="relative carousel-container">
+            <!-- Slider Track -->
+            <div class="carousel-slider">
+                <!-- Slide 1 -->
+                <div class="carousel-slide">
+                    <img src="granola bar.webp" alt="Delicious molten chocolate lava cake">
+                    <div class="slide-content">
+                        <h2 class="font-playfair text-3xl md:text-4xl">Granola Bar</h2>
+                        <p class="mt-2 text-base md:text-lg">An eruption of purity and health.</p>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="carousel-slide">
+                    <img src="snickerbites.webp" alt="Assortment of handmade chocolate truffles">
+                    <div class="slide-content">
+                        <h2 class="font-playfair text-3xl md:text-4xl">Snicker Bites</h2>
+                        <p class="mt-2 text-base md:text-lg">Handcrafted perfection, a treasure in every bite.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <button id="prevBtn" class="carousel-nav-btn absolute top-1/2 left-4 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center z-10">
+                <!-- SVG Icon for Previous -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button id="nextBtn" class="carousel-nav-btn absolute top-1/2 right-4 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center z-10">
+                <!-- SVG Icon for Next -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </button>
+
+            <!-- Navigation Dots -->
+            <div id="carousel-dots-container" class="carousel-dots">
+                <!-- Dots will be generated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2 class="prod-hd" id="prodhd">Our Story: Fueling Potential</h2>
+    <div class="aboutus">
+        <p class="max-w-4xl mx-auto text-center text-chocolate-dark text-lg md:text-xl px-4">
+            We believe that extraordinary work shouldn't come with a side of guilt or the inevitable sugar crash.
+
+Chocova was born from a simple mission in India: to transform the everyday chocolate treat into a source of clean, focused energy.
+
+We reject empty calories, using only the finest, honest ingredients—from intensely dark cocoa to aromatic Cardamom and wholesome Himalayan almonds. This is not a guilty indulgence; it’s genuine nourishment.
+
+Every square of Chocova is an invitation to take a mindful pause. It's the ritual that grounds your pulse, clears your mind, and provides the sustained power you need to craft your masterpiece, whether you’re designing a skyscraper or spinning clay.
+
+Chocova. The Clean Energy for Your Highest Ambition.
+        </p>
+        <img src="chocova-removebg-preview.png" alt="">
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <h2 class="prod-hd">Our Products:</h2>
+
+    <div class="product-area">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-sm w-full m-4 transform hover:scale-105 transition-transform duration-300">
+        <!-- Product Image -->
+        <div class="relative">
+            <img 
+                src="granola bar.webp" 
+                alt="Delicious Granola Bars" 
+                class="w-full h-56 object-cover"
+                onerror="this.onerror=null;this.src='https://placehold.co/600x400/F87171/FFFFFF?text=Granola+Bar';"
+            >
+            <span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">New</span>
+        </div>
+
+        <!-- Product Details -->
+        <div class="p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Artisan Granola Bars</h2>
+            <p class="text-gray-600 text-sm mb-4">
+                Packed with whole grains, nuts, and dried fruit. A wholesome and delicious snack for any time of the day.
+            </p>
+
+            <!-- Star Rating -->
+            <div class="flex items-center mb-4">
+                <!-- Full Star SVG -->
+                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <!-- Half Star SVG -->
+                <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <span class="text-gray-600 text-sm ml-2">(97 Reviews)</span>
+            </div>
+
+            <!-- Price and Add to Cart Button -->
+            <div class="flex items-center justify-between">
+                <span class="text-3xl font-bold text-gray-900">Rs 50</span>
+                <button id="cartButton" class="bg-indigo-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 transition-colors duration-300">
+                    Know More
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-sm w-full m-4 transform hover:scale-105 transition-transform duration-300">
+        <!-- Product Image -->
+        <div class="relative">
+            <img 
+                src="snickerbites.webp" 
+                alt="Snicker Bites" 
+                class="w-full h-56 object-cover"
+                onerror="this.onerror=null;this.src='https://placehold.co/600x400/F87171/FFFFFF?text=Granola+Bar';"
+            >
+            <span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">New</span>
+        </div>
+
+        <!-- Product Details -->
+        <div class="p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Snicker Bites</h2>
+            <p class="text-gray-600 text-sm mb-4">
+                Packed with whole grains, nuts, and dried fruit. A wholesome and delicious snack for any time of the day.
+            </p>
+
+            <!-- Star Rating -->
+            <div class="flex items-center mb-4">
+                <!-- Full Star SVG -->
+                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <!-- Half Star SVG -->
+                <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                <span class="text-gray-600 text-sm ml-2">(168 Reviews)</span>
+            </div>
+
+            <!-- Price and Add to Cart Button -->
+            <div class="flex items-center justify-between">
+                <span class="text-3xl font-bold text-gray-900">Rs 50</span>
+                <button id="cartButton" class="bg-indigo-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 transition-colors duration-300">
+                    Know More
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2 class="prod-hd">Some thoughts from our customers:</h2>
+    <div class="rvws">
+        <div
+  class="max-w-sm border border-gray-300 rounded-lg shadow-lg bg-white p-6 space-y-4"
+>
+  <div class="flex items-center space-x-4">
+    <div
+      class="h-12 w-12 flex items-center justify-center bg-red-500 text-white text-lg font-semibold rounded-full"
+    >
+      SK
+    </div>
+    <div>
+      <div class="text-gray-900 font-medium">Sahil Khan</div>
+      <!-- <div class="text-gray-600 text-sm">Content Creator</div> -->
+    </div>
+  </div>
+
+  <div class="flex text-red-500 text-xl">★★★★★</div>
+
+  <p class="text-gray-700">
+    I've been using Imagify for nearly two years, primarily for Instagram, and
+    it has been incredibly user-friendly, making my work much easier.
+  </p>
+
+  <div class="text-red-500 font-medium cursor-pointer hover:underline">
+    Read more
+  </div>
+</div>
+<div
+  class="max-w-sm border border-gray-300 rounded-lg shadow-lg bg-white p-6 space-y-4"
+>
+  <div class="flex items-center space-x-4">
+    <div
+      class="h-12 w-12 flex items-center justify-center bg-red-500 text-white text-lg font-semibold rounded-full"
+    >
+      DJ
+    </div>
+    <div>
+      <div class="text-gray-900 font-medium">Donald Jackman</div>
+      <div class="text-gray-600 text-sm">Content Creator</div>
+    </div>
+  </div>
+
+  <div class="flex text-red-500 text-xl">★★★★★</div>
+
+  <p class="text-gray-700">
+    I've been using Imagify for nearly two years, primarily for Instagram, and
+    it has been incredibly user-friendly, making my work much easier.
+  </p>
+
+  <div class="text-red-500 font-medium cursor-pointer hover:underline">
+    Read more
+  </div>
+</div>
+<div
+  class="max-w-sm border border-gray-300 rounded-lg shadow-lg bg-white p-6 space-y-4"
+>
+  <div class="flex items-center space-x-4">
+    <div
+      class="h-12 w-12 flex items-center justify-center bg-red-500 text-white text-lg font-semibold rounded-full"
+    >
+      DJ
+    </div>
+    <div>
+      <div class="text-gray-900 font-medium">Donald Jackman</div>
+      <div class="text-gray-600 text-sm">Content Creator</div>
+    </div>
+  </div>
+
+  <div class="flex text-red-500 text-xl">★★★★★</div>
+
+  <p class="text-gray-700">
+    I've been using Imagify for nearly two years, primarily for Instagram, and
+    it has been incredibly user-friendly, making my work much easier.
+  </p>
+
+  <div class="text-red-500 font-medium cursor-pointer hover:underline">
+    Read more
+  </div>
+</div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <!-- ======================= FOOTER START ======================= -->
+    <footer class="bg-[#4F332D] text-white">
+        <div class="container mx-auto px-6 py-12">
+            <!-- Main footer grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                
+                <!-- Brand Info -->
+                <div class="col-span-1 lg:col-span-1">
+                    <a href="#" class="flex items-center space-x-2">
+                        <!-- Simple SVG Logo -->
+                        <svg class="h-8 w-8 text-amber-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v4h-2zm0 6h2v2h-2z" opacity=".3"/>
+                        </svg>
+                        <span class="text-2xl font-bold text-white tracking-wider">Chocova</span>
+                    </a>
+                    <p class="mt-4 text-gray-300 text-sm">Crafting chocolates with passion and the finest ingredients.</p>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="col-span-1">
+                    <h3 class="font-semibold text-lg tracking-wide">Quick Links</h3>
+                    <ul class="mt-4 space-y-3 text-sm">
+                        <li><a href="#" class="text-gray-300 hover:text-amber-400 transition-colors duration-300">Our Story</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-amber-400 transition-colors duration-300">Shop All</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-amber-400 transition-colors duration-300">Corporate Gifts</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-amber-400 transition-colors duration-300">Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support Links -->
+                <div class="col-span-1">
+                    <h3 class="font-semibold text-lg tracking-wide">Support</h3>
+                    <ul class="mt-4 space-y-3 text-sm">
+                        <li><a href="#" class="text-gray-300 hover:text-amber-400 transition-colors duration-300">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-amber-400 transition-colors duration-300">FAQs</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-amber-400 transition-colors duration-300">Shipping & Returns</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-amber-400 transition-colors duration-300">Store Locator</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter Signup -->
+                <div class="col-span-1">
+                    <h3 class="font-semibold text-lg tracking-wide">Join Our Newsletter</h3>
+                    <p class="mt-4 text-gray-300 text-sm">Get exclusive offers and first look at our new collections.</p>
+                    <form id="newsletter-form" class="mt-4 flex flex-col sm:flex-row gap-2">
+                        <input type="email" id="email-input" name="email" placeholder="Enter your email" required class="w-full px-4 py-2 rounded-md bg-gray-100 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400 border border-transparent">
+                        <button type="submit" class="bg-amber-500 text-[#4F332D] font-bold py-2 px-4 rounded-md hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-300 transition-colors duration-300">
+                            Subscribe
+                        </button>
+                    </form>
+                    <p id="success-message" class="text-green-400 text-sm mt-2 h-4"></p>
+                </div>
+
+            </div>
+
+            <!-- Separator Line and Social Icons -->
+            <div class="mt-12 pt-8 border-t border-gray-700 flex flex-col sm:flex-row justify-between items-center">
+                <p class="text-sm text-gray-400 order-2 sm:order-1 mt-4 sm:mt-0">&copy; <span id="year"></span> Chocova. All Rights Reserved.</p>
+                
+                <div class="flex space-x-5 order-1 sm:order-2">
+                    <!-- Social Media Icons -->
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.08 2.525c.636-.247 1.363-.416 2.427-.465C9.53 2.013 9.884 2 12.315 2zM12 7a5 5 0 100 10 5 5 0 000-10zm0 8a3 3 0 110-6 3 3 0 010 6zm5.25-9.75a1.25 1.25 0 100 2.5 1.25 1.25 0 000-2.5z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- ======================= FOOTER END ======================= -->
+
+    <script>
+        // Set the current year automatically
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Handle newsletter form submission
+        const newsletterForm = document.getElementById('newsletter-form');
+        const emailInput = document.getElementById('email-input');
+        const successMessage = document.getElementById('success-message');
+
+        newsletterForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Basic email validation
+            if (emailInput.value && emailInput.checkValidity()) {
+                // Show success message
+                successMessage.textContent = 'Thank you for subscribing!';
+                emailInput.value = ''; // Clear the input field
+
+                // Hide the message after 3 seconds
+                setTimeout(() => {
+                    successMessage.textContent = '';
+                }, 3000);
+            } else {
+                // You could add more specific error handling here if needed
+                successMessage.textContent = 'Please enter a valid email.';
+                setTimeout(() => {
+                    successMessage.textContent = '';
+                }, 3000);
+            }
+        });
+        // JavaScript for Hamburger Menu Toggle
+        const hamburgerButton = document.getElementById('hamburger-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const openIcon = document.getElementById('open-icon');
+        const closeIcon = document.getElementById('close-icon');
+
+        hamburgerButton.addEventListener('click', () => {
+            // Toggle the 'hidden' class on the mobile menu to show/hide it
+            mobileMenu.classList.toggle('hidden');
+            
+            // Toggle the 'hidden' class on the icons to switch between hamburger and 'X'
+            openIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- VARIABLES ---
+            const slider = document.querySelector('.carousel-slider');
+            const slides = document.querySelectorAll('.carousel-slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('carousel-dots-container');
+
+            let currentIndex = 0;
+            const slideCount = slides.length;
+            const slideInterval = 3000; // Time in ms for auto-play (3 seconds)
+            let autoPlayInterval;
+
+            // --- FUNCTIONS ---
+
+            // Function to create navigation dots
+            function createDots() {
+                for (let i = 0; i < slideCount; i++) {
+                    const dot = document.createElement('div');
+                    dot.classList.add('carousel-dot');
+                    dot.addEventListener('click', () => {
+                        goToSlide(i);
+                        resetAutoPlay();
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+            }
+
+            // Function to update the carousel display
+            function updateCarousel() {
+                // Move the slider track
+                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+                // Update active slide for animations (Ken Burns effect & text)
+                slides.forEach((slide, index) => {
+                    if (index === currentIndex) {
+                        slide.classList.add('active');
+                    } else {
+                        slide.classList.remove('active');
+                    }
+                });
+
+                // Update active dot
+                const dots = document.querySelectorAll('.carousel-dot');
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+
+            // Go to a specific slide
+            function goToSlide(index) {
+                currentIndex = (index + slideCount) % slideCount; // Loop back if needed
+                updateCarousel();
+            }
+
+            // Go to the next slide
+            function nextSlide() {
+                goToSlide(currentIndex + 1);
+            }
+
+            // Go to the previous slide
+            function prevSlide() {
+                goToSlide(currentIndex - 1);
+            }
+
+            // Start the auto-play functionality
+            function startAutoPlay() {
+                autoPlayInterval = setInterval(nextSlide, slideInterval);
+            }
+
+            // Reset the auto-play timer (e.g., after manual navigation)
+            function resetAutoPlay() {
+                clearInterval(autoPlayInterval);
+                startAutoPlay();
+            }
+
+            // --- INITIALIZATION ---
+
+            // Create the navigation dots
+            createDots();
+            
+            // Set the first slide and dot as active
+            updateCarousel();
+            
+            // Start the automatic sliding
+            startAutoPlay();
+
+            // --- EVENT LISTENERS ---
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                resetAutoPlay();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                resetAutoPlay();
+            });
+        });
+    </script>
+</body>
+</html>
